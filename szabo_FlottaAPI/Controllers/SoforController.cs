@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
 using szabo_FlottaAPI.Models;
 
@@ -123,6 +124,30 @@ namespace szabo_FlottaAPI.Controllers
             catch (Exception ex)
             {
                return StatusCode(500, "Hiba a szerveren" + ex.Message);
+            }
+        }
+
+        //adott sofőr milyen járműveket vezetett?
+
+        [HttpGet("SoforJarmu/{id}")]
+        public IActionResult GetSoforJarmu(int id) 
+        {
+            try
+            {
+                Sofor vane = _context.Sofors.FirstOrDefault(s => s.Id == id);
+                if (vane == null)
+                {
+                    return NotFound("Hiányzik a sofőr!");
+                }
+                var result = _context.Kikuldottjarmus.
+                    Where(j => j.SoforNavigation.Id == id).
+                    Select(j => j.Gepjarmu).
+                    ToList();
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("Hiba!!" + ex.Message);
             }
         }
     }
