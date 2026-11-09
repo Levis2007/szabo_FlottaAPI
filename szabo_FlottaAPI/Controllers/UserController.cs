@@ -39,9 +39,9 @@ namespace szabo_FlottaAPI.Controllers
             }
         }
 
-        [HttpGet("GetUsersById{id}")]
+        [HttpGet("GetUserById{id}")]
 
-        public IActionResult GetUsersById(int id)
+        public IActionResult GetUserById(int id)
         {
             try
             {
