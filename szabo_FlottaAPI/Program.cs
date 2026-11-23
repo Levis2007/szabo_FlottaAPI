@@ -21,8 +21,16 @@ namespace szabo_FlottaAPI
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddAuthentication("Bearer");
+            builder.Services.AddJwtBearer("Bearer", options =>
+            {
+                options.Authority = "http://localhost:5000"; // Az IdentityServer címe
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters.ValidateAudience = false;
+            });// Kezdésnek kikapcsolva
 
-            var app = builder.Build();
+
+   var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -33,6 +41,7 @@ namespace szabo_FlottaAPI
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
